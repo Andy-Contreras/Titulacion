@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recibo de Pago</title>
+        <style>
+            body {
+                font-family: 'Helvetica', Arial, sans-serif;
+                color: #333;
+            }
+
+
+            h1 {
+                color: #2c3e50;
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 28px;
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid #e0e0e0;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+
+            .header img {
+                width: 100px;
+            }
+
+            .company-details {
+                text-align: right;
+            }
+
+            .company-details h2 {
+                margin: 0;
+                font-size: 18px;
+            }
+
+            .company-details p {
+                margin: 2px 0;
+                font-size: 12px;
+            }
+
+            .info {
+                padding: 20px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+
+            .info p {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+
+            .info p strong {
+                color: #2c3e50;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            table th,
+            table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            table th {
+                background-color: #f0f2f5;
+                color: #333;
+            }
+
+            .footer {
+                text-align: center;
+                font-size: 12px;
+                color: #777;
+                border-top: 1px solid #e0e0e0;
+                padding-top: 10px;
+                margin-top: 20px;
+            }
+
+            .footer a {
+                color: #3498db;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- Encabezado -->
+            <div class="header">
+                <img src="https://i.postimg.cc/JnQnwgnp/aca.jpg" alt="Logo Empresa">
+                <div class="company-details">
+                    <h2>{{ nombre_urbanizacion }}</h2>
+                    <p>{{ direccion_urbanizacion }}</p>
+                </div>
+            </div>
+            <!-- Título del Recibo -->
+            <h1>Recibo de Pago</h1>
+            <!-- Información del Cliente -->
+            <div class="info">
+                <p><strong>Nombre del Cliente: </strong>{{ cabFactura.id_residentes.nombre }} </p>
+                <p><strong>Teléfono: </strong>{{ cabFactura.id_residentes.telefono }} </p>
+                <p><strong>Cédula/RUC: </strong> {{ cabFactura.id_residentes.cedula }}</p>
+                <p><strong>Correo Electrónico: </strong>{{ cabFactura.id_residentes.email }}</p>
+                <p><strong>Monto Total Pagado:</strong> ${{ cabFactura.monto }}</p>
+                <p><strong>Fecha de Pago:</strong> {{ cabFactura.fecha_creacion }}</p>
+            </div>
+
+            <!-- Detalle del Pago -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Valor a pagar</th>
+                        <th>Recargo</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos dinámicos -->
+                    {% for det in detalles %}
+                    <tr>
+                        {% if det.total_a_pagar == det.subtotal %}
+                        <td>Pagado</td>
+                        {% else %}
+                        <td>En curso</td>
+                        {% endif %}
+                        <td>${{det.valor_pagar}}</td>
+                        <td>${{det.recargo}}</td>
+                        <td>${{det.total_a_pagar}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pie de página -->
+            <div class="footer">
+                <p>Gracias por tu pago. Si tienes alguna duda, visita nuestro </p>
+            </div>
+        </div>
+    </body>
+
+</html>

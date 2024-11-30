@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+	<div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-lg">
+		<h2 class="text-xl font-bell mb-6 text-center uppercase">{{ titulo }}</h2>
+		<form  method="post" class="space-y-6 "  action="{{ action_save }}">
+            {% csrf_token %}
+			{% block formulario %}
+                {{ form.as_p }}
+			{% endblock %}
+			<div class="flex justify-end space-x-2 mt-8">
+				<a href="{{ cancel_url }}"
+				   class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center">
+					Cancelar
+				</a>
+				<button type="submit" name="action"
+				   class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 text-center">
+					Guardar
+				</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

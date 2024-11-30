@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block contenido %}
+	<div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-lg border border-gray-300">
+		<h2 class="text-2xl font-bold mb-6 text-center text-gray-800">{{ titulo }}</h2>
+		<div class="text-center mb-6 ">
+			<table class="w-full table-auto border-collaps border ">
+				<thead>
+				<tr class="bg-gray-50">
+					{% block th %}
+						
+					{% endblock %}
+				</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-200 text-center">
+				<tr>
+					{% block td %}
+						
+					{% endblock %}
+				</tr>
+				</tbody>
+			</table>
+			<p class="text-lg text-gray-700">¿Está seguro de que desea eliminar este cliente?</p>
+		</div>
+		<div class="flex justify-end space-x-2 mt-8">
+            <form method="POST" action="{{ action_save }}" class="flex gap-4 mt-6">
+			{% csrf_token %}
+			<a href="{{ cancel_url }}"
+			   class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center">
+				Cancelar
+			</a>
+			<button type="submit" name="action"
+				   class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 text-center">
+					Guardar
+            </button>
+		</div>
+	</div>
+{% endblock %}

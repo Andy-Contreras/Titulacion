@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6 h-full flex flex-col">
+        <p class="text-center font-bold text-2xl pb-4 uppercase">{{ titulo }}</p>
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <div class="flex w-full sm:w-auto">
+                <form method="GET" action="" class="flex items-center justify-center space-x-2">
+                    <input type="text" name="query" value="{{ query|default_if_none:'' }}" placeholder="{{ buscar }}..."
+                           class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none
+				       focus:ring-2 focus:ring-indigo-400"/>
+                    <button type="submit"
+                            class="bg-custom-boton text-white px-4 py-2 rounded-md transition-transform duration-300 ease-in-out transform hover:bg-sky-600 hover:scale-105 hover:shadow-lg">
+                        Buscar
+                    </button>
+                    <a href="{{ listar_url }}" class="text-green-900 hover:text-gray-900 ">
+                            <i class="bi bi-arrow-counterclockwise text-3xl mb-1 "></i>
+                    </a>
+                </form>
+            </div>
+            <div class="px-6 py-4 flex space-x-2 justify-center">
+                <a href="{{ url_crear }}">
+                    <button class="bg-custom-boton text-white px-4 py-2 rounded-md transition-transform duration-300 ease-in-out transform hover:bg-sky-600 hover:scale-105 hover:shadow-lg">{{ btn_crear }}</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="overflow-y-auto border border-gray-200 rounded-lg h-full">
+            <table class="min-w-full table-auto border-collaps">
+                <thead>
+                <tr class="bg-gray-50">
+                    {% block th %}
+
+                    {% endblock %}
+                    <th class="border-b-2 border-gray-300 px-4 py-3 text-center font-bold text-gray-700 uppercase tracking-wide bg-gradient-to-r from-gray-100 to-gray-200"
+                        colspan="2">Opciones
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-center">
+                {% for object in object_list %}
+                    <tr>
+                        {% block td %}
+
+                        {% endblock %}
+                        <td class="px-6 py-4 flex space-x-2 justify-center">
+                            <a href="{{ btn_actualizar }}/{{ object.id }}"
+                               class="px-4 py-2 bg-custom-green text-white rounded-md hover:bg-green-800 text-center">
+                                Editar
+                            </a>
+                            <a href="{{ btn_eliminar }}/{{ object.id }}"
+                               class="px-4 py-2 bg-custom-red text-white rounded-md hover:bg-red-700 text-center">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

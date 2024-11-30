@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de la alicuota {{ alicuota.id }} </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .header img {
+                width: 100px;
+            }
+        h2 {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        .section {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        input,
+        select {
+            width: 95%;
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .disabled {
+            background-color: #f0f0f0;
+        }
+
+        /* Estilo específico para la sección Información de Pagos */
+        .info-pagos {
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            background-color: transparent;
+            /* Sin fondo */
+            text-align: center;
+        }
+
+        .info-pagos .title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .payment-info {
+            width: 100%;
+            text-align: center;
+        }
+
+        .payment-item {
+            display: inline-block;
+            width: 22%;
+            /* Ajusta el ancho para que los cuatro elementos estén en una fila */
+            margin: 0 1%;
+            /* Espaciado entre los elementos */
+            text-align: center;
+        }
+
+        .payment-label {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .payment-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            padding: 5px;
+            border: 1px solid #ddd;
+            /* Borde solo para el valor */
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            /* Fondo claro solo para el valor */
+            display: inline-block;
+            width: 80%;
+            /* Ajuste de ancho para centrar dentro del contenedor */
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://i.postimg.cc/JnQnwgnp/aca.jpg" alt="Logo Empresa">
+        <h2>Alicuota</h2>
+    </div>
+    <table>
+        <tr>
+            <td class="section" style="width: 48%;">
+                <div class="section-title">Información del Residente</div>
+                <label>Vivienda</label>
+                <input type="text" value="{{ alicuota.vivienda.villa }}">
+                <label>Nombre</label>
+                <input type="text" value="{{ alicuota.vivienda.residente }}">
+                <label>Cédula/RUC</label>
+                <input type="text" value="{{ alicuota.vivienda.residente.cedula }}">
+                <label>Correo</label>
+                <input type="email" value="{{ alicuota.vivienda.residente.email }}">
+                <label>Fecha del primer pago</label>
+                <input type="date" value="{{ alicuota.fecha_pago|date:" Y/m/d" }}">
+            </td>
+            <td class="section" style="width: 48%;">
+                <div class="section-title">Cabecera Alicuota</div>
+                <label>Costo Vivienda</label>
+                <input type="text" value="{{ alicuota.monto }}">
+                <label>Entrada</label>
+                <input type="number" value="{{ alicuota.entrada_tasa.porcentaje }}">
+                <label>Interés</label>
+                <input type="number" value="{{ alicuota.Interes.porcentaje }}">
+                <label>Periodo</label>
+                <input type="number" value="{{ alicuota.periodo }}">
+                <label>Pago Inicial</label>
+                <input type="text" value="{{ alicuota.pago_inicial }}">
+            </td>
+        </tr>
+    </table>
+
+    <!-- informacion de pago -->
+    <div class="info-pagos" style="margin-bottom: 20px;">
+        <div class="title">Información de Pagos</div>
+        <div class="payment-info">
+            <div class="payment-item">
+                <span class="payment-label">Saldo a pagar</span>
+                <div class="payment-value">${{ alicuota.saldo_pagar }}</div>
+            </div>
+            <div class="payment-item">
+                <span class="payment-label">Interés</span>
+                <div class="payment-value">${{ alicuota.Interestotal }}</div>
+            </div>
+            <div class="payment-item">
+                <span class="payment-label">Saldo a Financiar</span>
+                <div class="payment-value">${{ alicuota.saldo_financiar }}</div>
+            </div>
+            <div class="payment-item">
+                <span class="payment-label">Saldo Pendiente</span>
+                <div class="payment-value">${{ saldo_pendiente }}</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Información de detalle -->
+    <div class="section">
+        <div class="section-title">Detalle de las Alícuotas</div>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Secuencia</th>
+                    <th>Fecha</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Recargo</th>
+                    <th>Total</th>
+                    <th>Saldo a Pagar</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iterar sobre los detalles de pago -->
+                {% for detalle in detalles %}
+                    <tr>
+                        <td>{{ detalle.secuencia }}</td>
+                        <td>{{ detalle.fecha|date:"Y/m/d" }}</td>
+                        <td>{{ detalle.fecha_vencimiento|date:"Y/m/d" }}</td>
+                        <td>{{ detalle.recargo }}</td>
+                        <td>{{ detalle.total }}</td>
+                        <td>{{ detalle.total_con_recargo }}</td>
+                        <td>{{ detalle.estado }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr class="table-total">
+                    <td colspan="4">Total</td>
+                    <td>${{ total_acumulado }}</td>
+                    <td>${{ saldo_acumulado }}</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

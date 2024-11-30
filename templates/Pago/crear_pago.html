@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+    <div class="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg mt-10">
+
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">{{ titulo }}</h1>
+            <p id="fecha-emision" class="text-sm text-gray-500"></p>
+        </div>
+        <div class="text-center">
+            <p class="text-2xl font-bold text-gray-800">{{ nombre_urbanizacion }}</p>
+            <p class="text-sm text-gray-500">{{ direccion_urbanizacion }}</p>
+        </div>
+    </div>
+
+    <!-- Botones de Residente y Cliente -->
+    <div class="flex justify-end gap-4 mb-6">
+        <div class="relative">
+            <input id="buscar_cliente" oninput="ObtenerCliente(this.value)" type="text"
+                   class="rounded-lg w-full border border-gray-300 p-2" placeholder="Busca cliente por nombre">
+
+            <ul id="sugerencias"
+                class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-auto">
+            </ul>
+        </div>
+
+        <button onclick="ObtenerResidente()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Residente</button>
+        <label for="modal-toggle" class="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer">Cliente</label>
+    </div>
+
+    <!-- Modal para Cliente -->
+    <input type="checkbox" id="modal-toggle" class="peer hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-50 hidden peer-checked:flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-xl font-bold mb-4 text-center uppercase">Datos del Cliente</h2>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Nombre</label>
+                    <input id="nombre_cliente" type="text" name="nombre"
+                           class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ingrese nombre" required>
+                    <div id="alerta_nombre"
+                         class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                        <strong class="font-bold">Error:</strong>
+                        <span id="mensaje_alerta_nombre"></span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Cédula/RUC</label>
+                    <input id="cedula_cliente" type="text" name="cedula"
+                           class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ingrese cédula" required>
+                    <div id="alerta_cedula"
+                         class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                        <strong class="font-bold">Error:</strong>
+                        <span id="mensaje_alerta_cedula"></span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Teléfono</label>
+                    <input id="telefono_cliente" type="tel" name="telefono"
+                           class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ingrese teléfono" required>
+                    <div id="alerta_telefono"
+                         class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                        <strong class="font-bold">Error:</strong>
+                        <span id="mensaje_alerta_telefono"></span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Correo</label>
+                    <input id="correo_cliente" type="email" name="correo"
+                           class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ingrese correo">
+                    <div id="alerta_correo"
+                         class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                        <strong class="font-bold">Error:</strong>
+                        <span id="mensaje_alerta_correo"></span>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <label for="modal-toggle"
+                           class="bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer">Cancelar</label>
+                    <button type="button" onclick="AgregarCliente()"
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg">Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Datos del propietario -->
+    <div class="mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Datos del Propietario</h2>
+        <form>
+            <table class="min-w-full text-sm text-gray-700">
+                <tbody>
+                <tr>
+                    <td class="py-2 px-4 font-semibold">Nombre:</td>
+                    <td class="py-2 px-4">
+                        <input type="text" id="nombre"
+                               class="w-full p-2 border border-gray-300 bg-gray-200 rounded-md" disabled
+                               placeholder="------">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 font-semibold">Correo:</td>
+                    <td class="py-2 px-4">
+                        <input type="email" id="correo"
+                               class="w-full p-2 border border-gray-300 bg-gray-200 rounded-md" disabled
+                               placeholder="------">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 font-semibold">Teléfono:</td>
+                    <td class="py-2 px-4">
+                        <input type="tel" id="telefono"
+                               class="w-full p-2 border border-gray-300 bg-gray-200 rounded-md" disabled
+                               placeholder="------">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 font-semibold">Cédula/RUC:</td>
+                    <td class="py-2 px-4">
+                        <input type="text" id="cedula"
+                               class="w-full p-2 border border-gray-300 bg-gray-200 rounded-md" disabled
+                               placeholder="------">
+                    </td>
+                </tr>
+                <tr class="hidden" id="inputMonto">
+                    <td class="py-2 px-4 font-semibold">Monto:</td>
+                    <td class="py-2 px-4">
+                        <input type="number" id="monto" class="w-full p-2 border border-gray-300 rounded-md"
+                               onchange="MostrarDetalle(this.value)">
+                        <p>
+                            Debe de dar enter o hacer clic en cual parte de la pagína para que se realice el
+                            calculo.
+                        </p>
+                        <div id="alerta_monto"
+                              class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                            <strong class="font-bold">Error:</strong>
+                            <span></span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- Detalles de la alícuota -->
+    <div class="border p-4 rounded-lg shadow mt-4">
+        <h2 class="text-lg font-bold mb-4 opacity-70">Detalle</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-300" id="tablaPagos">
+                <thead>
+                <tr class="bg-gray-50">
+                    <th class="border border-gray-300 px-4 py-2 text-center">Secuencia</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Descripcion</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Valor a Pagar</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Recargo</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mt-2">
+        <div class="flex justify-end gap-4">
+            <a href="{{ cancel_url }}"
+               class="bg-red-500 text-white px-4 py-2 rounded-lg">
+                Cancelar
+            </a>
+            <button type="button" onclick="crearPago()" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Crear Pago
+            </button>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'JS/crear_pago.js' %}"></script>
+    <script>
+        // Obtén la fecha actual
+        const fechaActual = new Date();
+
+        // Formatea la fecha (ej. 8 de noviembre de 2024)
+        const opciones = {year: 'numeric', month: 'long', day: 'numeric'};
+        const fechaFormateada = fechaActual.toLocaleDateString('es-ES', opciones);
+
+        // Asigna la fecha formateada al elemento con id "fecha-emision"
+        document.getElementById("fecha-emision").textContent = "Fecha de emisión: " + fechaFormateada;
+    </script>
+{% endblock %}

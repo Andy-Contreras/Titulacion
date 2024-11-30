@@ -1,0 +1,14 @@
+{% extends 'eliminar.html' %}
+
+{% block th %}
+	<th class="border border-gray-200 px-4 py-2  font-bell text-gray-600">Nombre</th>
+	<th class="border border-gray-200 px-6 py-3  font-bell text-gray-600">Cédula</th>
+	<th class="border border-gray-200 px-6 py-3  font-bell text-gray-600">Correo</th>
+
+{% endblock %}
+
+{% block td %}
+	<td class="px-6 py-4 text-gray-800">{{ object.nombre }}</td>
+	<td class="px-6 py-4 text-gray-500">{{ object.cedula }}</td>
+	<td class="px-6 py-4 text-gray-500">{{ object.email }}</td>
+{% endblock %}

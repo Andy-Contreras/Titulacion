@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+<div class="max-w-8xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+  <h1 class="text-3xl font-bell mb-6 text-center">{{ titulo }}</h1>
+  <form method="POST">
+
+    <!-- Selector de residente -->
+    <div class="mb-6">
+      <label for="residente" class="block text-lg font-bell mb-2 text-gray-700">Seleccione el
+        Residente:</label>
+      <input class="w-full border  bg-gray-100 border-gray-300 p-2 rounded-md" type="text" id="residente"
+        value="{{propietario.residente}}" disabled>
+    </div>
+    <input class="w-full border  bg-gray-100 border-gray-300 p-2 rounded-md hidden" type="text" id="id_residente"
+      value="{{propietario.id}}" disabled>
+    <!-- Campo Descripción -->
+    <div class="mb-6">
+      <label for="descripcion" class="block text-lg font-bell mb-2 text-gray-700">Descripción:</label>
+      <input class="w-full border border-gray-300 p-2 rounded-md" type="text" id="id_descripcion"
+        value="{{propietario.descripcion}}">
+    </div>
+
+    <!-- Tabla de miembros de la familia -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left table-auto border-collapse bg-white shadow-lg rounded-lg" id="familia">
+        <thead class="text-center">
+          <tr class="bg-gray-300">
+            <th class="p-3 border">Nombre</th>
+            <th class="p-3 border">Cédula</th>
+            <th class="p-3 border">Sexo</th>
+            <th class="p-3 border">Parentesco</th>
+            <th class="p-3 border">Fecha de Nacimiento</th>
+            <th class="p-3 border">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        <tr class="bg-gray-300">
+          <td class="p-3 border">
+            <input class="" type="text" id="nombre" placeholder="Nombre" required>
+          </td>
+          <td class="p-3 border">
+            <input class="form-control" type="text" id="cedula" placeholder="Cédula" required>
+          </td>
+          <td class="p-3 border">
+            <select class="form-control" id="sexo" required>
+              <option value="">Sexo</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+            </select>
+          </td>
+          <td class="p-3 border">
+            <select class="form-control" id="parentesco" required>
+              <option value="">Parentesco</option>
+              <option value="Hermano">Hermano</option>
+              <option value="Hermana">Hermana</option>
+              <option value="Padre">Padre</option>
+              <option value="Madre">Madre</option>
+              <option value="Abuelo">Abuelo</option>
+              <option value="Abuela">Abuela</option>
+              <option value="Conyuge">Conyuge</option>
+              <option value="Hijo">Hijo</option>
+              <option value="Hija">Hija</option>
+            </select>
+          </td>
+          <td class="p-3 border">
+            <input class="form-control" type="date" id="fecha-nacimiento" required>
+          </td>
+          <td class="p-3 border flex justify-center h-full">
+            <a class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-600
+							focus:outline-none" onclick="agregarPersona()">Agregar
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <p class="mt-4 text-lg font-bold">Total de miembros: <span id="contadorMiembros"></span></p>
+    </div>
+    <!-- Botones de acción -->
+    <div class="flex justify-between mt-6 space-x-2">
+      <a href="{{ cancel_url }}"
+        class="w-1/2 bg-red-500 text-white py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none text-center">Cancelar</a>
+      <a href="{{ guarda_url }}" class="w-1/2 bg-green-500 text-white py-2 rounded-md shadow-md hover:bg-green-600
+				focus:outline-none text-center" onclick="comsumirApi()">
+        Modificar Familia
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'JS/editar_familia.js' %}"></script>
+{% endblock %}

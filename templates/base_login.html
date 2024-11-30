@@ -1,0 +1,24 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }}</title>
+    {% tailwind_css %}
+</head>
+<body>
+<div class="h-screen bg-custom-gray flex justify-between">
+    <div class="flex-1 flex justify-center items-center">
+        <p class="text-4xl font-bold text-center text-white shadow-lg">ACA - SOFTWARE</p>
+    </div>
+    <div class="flex items-center w-full lg:w-1/3 bg-white border rounded-l-3xl shadow-2xl
+    shadow-black drop-shadow-2xl p-4">
+        <div class="w-full">
+            {% block contenido %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

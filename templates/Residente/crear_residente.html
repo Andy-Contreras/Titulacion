@@ -1,0 +1,84 @@
+{% extends 'crear.html' %}
+{% load static %}
+{% block formulario %}
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="nombre" class="block text-lg font-bell mb-2">Nombre</label>
+        {{ form.nombre }}
+    </div>
+    {% if form.cedula.errors %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-4" role="alert">
+            <strong class="font-bold">Error al Grabar:</strong>
+            <ul class="list-disc list-inside">
+                {% for error in form.cedula.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="cedula" class="block text-lg font-bell mb-2">Cédula</label>
+        {{ form.cedula }}
+    </div>
+    {% if form.email.errors %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-4" role="alert">
+            <strong class="font-bold">Error al Grabar:</strong>
+            <ul class="list-disc list-inside">
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="correo" class="block text-lg font-bell mb-2">Correo</label>
+        {{ form.email }}
+    </div>
+    {% if form.telefono.errors %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-4" role="alert">
+            <strong class="font-bold">Error al Grabar:</strong>
+            <ul class="list-disc list-inside">
+                {% for error in form.telefono.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="telefono" class="block text-lg font-bell mb-2">Teléfono</label>
+        {{ form.telefono }}
+    </div>
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="tipo_residente" class="block text-lg font-bell mb-2">Tipo Residente</label>
+        {{ form.tipo_residente }}
+    </div>
+    {% if form.vehiculo.errors %}
+        <div class="mt-2">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-2 text-sm rounded-md">
+                <strong class="block font-semibold">Errores:</strong>
+                <ul class="list-disc pl-5">
+                    {% for error in form.vehiculo.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="vehiculo" class="block text-lg font-bell mb-2">Vehículos</label>
+        {{ form.vehiculo }}
+    </div>
+    <div class="w-full border border-gray-300 p-2 rounded-md">
+        <label for="status" class="block text-lg font-bell mb-2">Residente</label>
+        {{ form.status }} <!-- Aquí agregamos el campo para el estado -->
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        function validarNumero(input) {
+        // Reemplazar cualquier carácter que no sea un dígito
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }</script>
+
+{% endblock %}

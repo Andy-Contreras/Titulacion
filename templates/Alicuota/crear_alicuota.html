@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+    <div class="max-w-5xl mx-auto rounded-lg bg-white">
+
+        <div class=" flex items-center space-x-2 justify-end sm:justify-between border-b-4 mx-6 mt-14 sm:mt-2 pb-2 m-2">
+            <h2 class="text-2xl font-bell text-center font-bold">Crear Alicuota</h2>
+            <div>
+                <input id="fechaAlicuota" type="text"
+                       class="border border-gray-300 p-2 rounded-lg w-40 text-center font-bold" disabled/>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1  sm:grid-cols-2 gap-4 mb-8">
+            <div class="border p-2 rounded-lg shadow">
+                <h2 class="text-lg font-bell mb-2 font-bold opacity-70">Información del Residente</h2>
+                <div>
+                    <label class="font-bell">Vivienda</label>
+                    <input id="villa" type="text" placeholder="Ingresa la manzana - villa..."
+                           class="border border-gray-300 p-2 rounded w-full" oninput="mostrarSugerencias(this.value)"/>
+                    <ul id="sugerencias"
+                        class="border border-gray-300 rounded mt-1 w-full bg-white max-h-40 overflow-y-auto">
+                        <!-- Aquí se agregarán las sugerencias -->
+                    </ul>
+                </div>
+                <div>
+                    <label class="font-bell">Nombre</label>
+                    <input id="nombre" type="text" class="border border-gray-300 p-2 rounded w-full bg-gray-100"
+                           disabled
+                           placeholder="Sin nombre"/>
+                </div>
+                <div>
+                    <label class="font-bell">Cédula/RUC</label>
+                    <input id="cedula" type="text" class="border border-gray-300 p-2 rounded w-full bg-gray-100"
+                           disabled
+                           placeholder="Sin cédula"/>
+                </div>
+                <div>
+                    <label class="font-bell">Correo</label>
+                    <input id="correo" type="email" class="border border-gray-300 p-2 rounded w-full bg-gray-100"
+                           disabled
+                           placeholder="Sin correo"/>
+                </div>
+                <div>
+                    <label class="font-bell">Fecha del primer pago</label>
+                    <input id="fechaInicial" type="date" class="border border-gray-300 p-2 rounded w-full"/>
+                    <div id="alerta_monto"
+                         class="hidden mt-2 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md">
+                        <strong class="font-bold">Error:</strong>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="border p-2 rounded-lg shadow">
+                <h2 class="text-lg font-bell mb-2 font-bold opacity-70">Cabecera Alicuota</h2>
+
+                <div>
+                    <label class="font-bell">Costo Vivienda</label>
+                    <input id="costoVivienda" type="text" placeholder="Sin costo"
+                           class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                </div>
+                <div>
+                    <label class="font-bell">Entrada</label>
+                    <select class="border border-gray-300 p-2 rounded w-full bg-gray-100" id="entrada">
+                        {% for entrada in tasaEntrada %}
+                            <option value="{{ entrada.id }},{{ entrada.porcentaje }}">{{ entrada.porcentaje }}%</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bell">Interes</label>
+                    <select class="border border-gray-300 p-2 rounded w-full bg-gray-100" id="interes">
+                        {% for interes in tasaInteres %}
+                            <option value="{{ interes.id }},{{ interes.porcentaje }}">{{ interes.porcentaje }}%</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class=" font-bell">Periodo</label>
+
+                    <input id="periodo" type="number" class="border border-gray-300 p-2 rounded w-full"/>
+                </div>
+                <div>
+                    <label class="font-bell">Pago Inicial</label>
+                    <input id="pagoInicial" type="text" value="$0"
+                           class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                </div>
+
+            </div>
+        </div>
+        <div class="gap-4 mb-8">
+            <div class="border p-2 rounded-lg shadow">
+                <h2 class="text-lg font-bell mb-2 font-bold opacity-70">Información de Pagos</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 space-x-2">
+                    <div>
+                        <label class="font-bell">Saldo a pagar</label>
+                        <input id="monto" type="text" value="$0"
+                               class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                    </div>
+                    <div>
+                        <label class="font-bell">Interes</label>
+                        <input id="interesTotal" type="text" value="$0"
+                               class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                    </div>
+                    <div>
+                        <label class="font-bell">Saldo a Financiar</label>
+                        <input id="saldoPagar" type="text" value="$0"
+                               class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                    </div>
+                    <div>
+                        <label class="font-bell">Saldo Pendiente</label>
+                        <input id="saldoPendiente" type="text" value="$0"
+                               class="border border-gray-300 p-2 rounded w-full bg-gray-100" disabled/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="border p-2 rounded-lg shadow">
+            <h2 class="text-lg font-bell mb-2 font-bold opacity-70">Detalles de la Factura</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300" id="tablaPagos">
+                    <thead>
+                    <tr class="bg-gray-50">
+                        <th class="border border-gray-300 px-4 py-2 text-center">Secuencia</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Fecha</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Fecha Vencimiento</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Recargo</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Total</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Saldo a Pagar</th>
+                        <th class="border border-gray-300 px-4 py-2 text-center">Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Aquí irán las filas generadas dinámicamente -->
+                    </tbody>
+                    <tr class="font-bold bg-gray-200">
+                        <td colspan="3" class="border border-gray-300 px-4 py-2 text-right">Total</td>
+                        <td id="" class="border border-gray-300 px-4 py-2 text-center">$0,00</td>
+                        <td id="totalPagos" class="border border-gray-300 px-4 py-2 text-center">$0,00</td>
+                        <td id="totalaPagar" class="border border-gray-300 px-4 py-2 text-center">$0,00</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-center space-x-4">
+            <button type="button" onclick="CrearAlicuota()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Guardar
+            </button>
+            <button type="button" onclick="GenerarAlicuota()"
+                    class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Generar
+                Pagos
+            </button>
+            </button>
+        </div>
+
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'JS/crear_alicuota.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script type="text/javascript" src="{% static 'JS/validacion.js' %}"></script>
+
+{% endblock %}

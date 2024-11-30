@@ -1,0 +1,135 @@
+<div class="flex">
+    <!-- Botón para mostrar el menú lateral en pantallas pequeñas -->
+    <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer lg:hidden" onclick="toggleSidebar()">
+        <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
+    </span>
+    <!-- Barra lateral -->
+    <div id="sidebar"
+         class="fixed top-0 left-0 w-70 bg-custom-gray h-full flex flex-col transition-transform duration-300 transform -translate-x-full lg:translate-x-0 shadow-lg border-r border-gray-700 z-50">
+        <div class="p-6 text-white flex-grow">
+            <div class="flex justify-between items-center">
+                <div class="p-2.5 mt-1 flex items-center rounded-md">
+                    <i class="bi bi-people px-2 py-1 bg-white text-black rounded-md"></i>
+                    <h1 class="text-[15px] ml-3 text-xl text-gray-200 font-bold">Aca-Software</h1>
+                </div>
+                <button id="close-menu"
+                        class="lg:hidden absolute top-4 right-4 p-2 rounded-md hover:bg-red-700 transition duration-200"
+                        onclick="toggleSidebar()">
+                    <i class="bi bi-x text-white"></i>
+                </button>
+            </div>
+            <hr class="my-2 text-gray-600">
+
+            <!-- Menú de navegación -->
+            <ul class="mt-4 space-y-8 text-lg">
+                <li class="mb-2 flex items-center transform hover:translate-x-2 p-2 rounded-md">
+                    <i class="bi bi-speedometer2 mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                    <a href="{% url 'inicio' %}" class="hover:text-gray-400 transition-colors duration-200">Inicio</a>
+                </li>
+
+                <!-- Propietario -->
+                <li class="mb-2">
+                    <input type="checkbox" id="Propietario" class="hidden peer"/>
+                    <label for="Propietario"
+                           class="flex items-center cursor-pointer transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                        <i class="bi bi-building mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                        <a href="{% url 'residente_lista' %}"
+                           class="hover:text-gray-400 transition-colors duration-200">Residente</a>
+                        <i class="bi bi-chevron-down ml-2"></i>
+                    </label>
+                    <ul
+                            class="pl-8 space-y-2 max-h-0 overflow-hidden peer-checked:max-h-40 transition-all duration-300">
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-people mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'familia_lista' %}"
+                               class="hover:text-gray-400 transition-colors duration-200">Familia Residente</a>
+                        </li>
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-car-front-fill mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'vehiculo_lista' %}"
+                               class="hover:text-gray-400 transition-colors duration-200">Vehículo</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Cliente -->
+                <!-- Vivienda -->
+                <li class="mb-2 flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                    <i class="bi bi-house mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                    <a href="{% url 'vivienda_lista' %}"
+                       class="hover:text-gray-400 transition-colors duration-200">Vivienda</a>
+                </li>
+
+                <!-- Submenú Finanza -->
+                <li class="mb-2">
+                    <input type="checkbox" id="dropdown" class="hidden peer"/>
+                    <label for="dropdown"
+                           class="flex items-center cursor-pointer transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                        <i class="bi bi-person-lines-fill mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                        <span class="hover:text-gray-400 transition-colors duration-200">Finanza</span>
+                        <i class="bi bi-chevron-down ml-2"></i>
+                    </label>
+                    <ul
+                            class="pl-8 space-y-2 max-h-0 overflow-hidden peer-checked:max-h-40 transition-all duration-300">
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-calculator mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'alicuota_crear' %}"
+                               class="hover:text-gray-400 transition-colors duration-200">Alicuota</a>
+                        </li>
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-cash-stack mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'alicuota_lista' %}"
+                               class="hover:text-gray-400 transition-colors duration-200">Pago</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Submenú Reporte -->
+                <li class="mb-2">
+                    <input type="checkbox" id="generacion" class="hidden peer"/>
+                    <label for="generacion"
+                           class="flex items-center cursor-pointer transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                        <i class="bi-file-earmark-text-fill mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                        <span class="hover:text-gray-400 transition-colors duration-200">Reporte</span>
+                        <i class="bi bi-chevron-down ml-2"></i>
+                    </label>
+                    <ul
+                            class="pl-8 space-y-2 max-h-0 overflow-hidden peer-checked:max-h-40 transition-all duration-300">
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-file-earmark-person mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'reporte_residente' %}" class="hover:text-gray-400 transition-colors duration-200">Residente</a>
+                        </li>
+                        <li class="flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                            <i class="bi bi-calendar3 mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                            <a href="{% url 'reportepago' %}" class="hover:text-gray-400 transition-colors duration-200">Fecha</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Configuración -->
+                <li class="mb-2 flex items-center transform transition-transform hover:translate-x-2 p-2 rounded-md">
+                    <i class="bi bi-gear mr-2 px-2 py-1 bg-white text-black rounded-md"></i>
+                    <a href="{% url 'admin:index' %}"
+                       class="hover:text-gray-400 transition-colors duration-200">Configuracion</a>
+                </li>
+            </ul>
+
+            <!-- Cerrar sesión -->
+            <div class="p-4 mt-4">
+                <a href="{% url 'logout' %}"
+                   class="w-full bg-custom-red hover:bg-red-700 text-white font-semibold py-2 px-4 rounded flex items-center justify-center space-x-2 transform transition-transform hover:scale-105 hover:shadow-lg transition-shadow duration-200">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Cerrar sesión</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Función para abrir y cerrar el sidebar en pantallas pequeñas
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('-translate-x-full');
+    }
+</script>

@@ -1,0 +1,119 @@
+{% extends 'listado.html' %}
+{% block contenido %}
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h1 class="text-3xl font-semibold mb-6 text-center text-blue-700 uppercase">{{ titulo }}</h1>
+        <!-- Barra de búsqueda -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <div class="flex flex-wrap w-full sm:w-auto gap-2">
+                <form method="GET" action="" class="flex items-center justify-center space-x-2">
+                    <input type="text" name="query" value="{{ query }}" placeholder="{{ buscar }}..."
+                           class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none
+				       focus:ring-2 focus:ring-indigo-400"/>
+                    <button type="submit"
+                            class="bg-custom-boton text-white px-4 py-2 rounded-md transition-transform duration-300 ease-in-out transform hover:bg-sky-600 hover:scale-105 hover:shadow-lg">
+                        Buscar
+                    </button>
+                    <a href="{{ listar_url }}">
+                        <button class="text-green-900 hover:text-gray-900 ">
+                            <i class="bi bi-arrow-counterclockwise text-3xl mb-1 "></i>
+                        </button>
+                    </a>
+                </form>
+            </div>
+            <a href="{{ url_crear }}"
+               class="flex items-center bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-900">
+                <i class="bi bi-node-plus mr-2"></i>Añadir Familia
+            </a>
+        </div>
+        <!-- Tabla de residentes -->
+        <div>
+            <table class="w-full text-left border border-gray-300">
+                <thead>
+                <tr>
+                    <th class="py-2 text-center font-medium border-b">Residente</th>
+                    <th class="py-2 text-center font-medium border-b">Nombre Familia</th>
+                    <th class="py-2 text-center font-medium border-b">Opción</th>
+                </tr>
+                </thead>
+                <tbody id="resident-list" class="space-y-4">
+                {% for object in object_list %}
+                    <tr class="border-b">
+                        <td class="text-center border-b">
+                            <span class="font-medium">{{ object.residente }}</span>
+                        </td>
+                        <td class="text-center border-b">
+                            <p>Familia: {{ object.descripcion }}</p>
+                        </td>
+                        <td class="text-center border-b space-x-2">
+                            <button
+                                    class="show-family-info bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+                                    onclick="mostrarModal({{ object.id }})">Detalle
+                            </button>
+                            <a href="{% url 'familia_actualizar' object.id %}"
+                               class="px-4 py-2 bg-custom-green text-white rounded-md hover:bg-green-800 text-center">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Modal Template -->
+            {% for object in object_list %}
+                <div id="modal{{ object.id }}"
+                     class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full overflow-hidden">
+                        <h2 class="text-xl font-bold mb-4 text-center">Información de la Familia
+                            de {{ object.residente }}</h2>
+                        <p class="text-center font-bell mb-4">Detalles de los miembros de la familia</p>
+                        <div class="overflow-hidden">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="font-semibold border px-2 py-1">Nombre</th>
+                                    <th class="font-semibold border px-2 py-1">Cédula</th>
+                                    <th class="font-semibold border px-2 py-1">Sexo</th>
+                                    <th class="font-semibold border px-2 py-1">Parentesco</th>
+                                    <th class="font-semibold border px-2 py-1">Fecha de Nacimiento</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for miembro in object.miembros.all %}
+                                    <tr>
+                                        <td class="border px-2 py-1">{{ miembro.nombre }}</td>
+                                        <td class="border px-2 py-1">{{ miembro.cedula }}</td>
+                                        <td class="border px-2 py-1">{{ miembro.sexo }}</td>
+                                        <td class="border px-2 py-1">{{ miembro.parentesco }}</td>
+                                        <td class="border px-2 py-1">{{ miembro.fecha_nacimiento }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="border px-2 py-1 text-center">No hay miembros en esta
+                                            familia.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-center mt-4">
+                            <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none"
+                                    onclick="ocultarModal({{ object.id }})">Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function mostrarModal(id) {
+            document.getElementById('modal' + id).classList.remove('hidden');
+        }
+
+        function ocultarModal(id) {
+            document.getElementById('modal' + id).classList.add('hidden');
+        }
+    </script>
+{% endblock %}

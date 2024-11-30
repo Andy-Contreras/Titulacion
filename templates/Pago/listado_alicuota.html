@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-8">
+        <p class="text-center font-bell text-2xl pb-4">Lista de Alicuotas</p>
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <div class="flex w-full sm:w-auto">
+                <form method="get" action="" class="flex items-center justify-center space-x-2">
+                    <input type="text" name="search" placeholder="Buscar Villa..."
+                           value="{{ search_query }}"
+                           class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded-r-md hover:bg-indigo-500">Buscar</button>
+
+                    <a href="{{ listar_url }}" class="text-green-900 hover:text-gray-900 ">
+                        <i class="bi bi-arrow-counterclockwise text-3xl mb-1 "></i>
+                    </a>
+                </form>
+            </div>
+        </div>
+        <div class="overflow-y-auto border border-gray-200 rounded-lg h-full">
+            <table class="min-w-full table-auto border-collapse">
+                <thead>
+                <tr class="bg-gray-50">
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Nombre Residente</th>
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Monto</th>
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Periodo</th>
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Interés</th>
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Saldo Pendiente</th>
+                    <th class="border-b border-gray-200 px-6 py-3 font-bell text-gray-600">Opciones</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-center">
+                {% for object in alicuota %}
+                    <tr>
+                        <td class="px-6 py-4 text-gray-800">{{ object.vivienda }}</td>
+                        <td class="px-6 py-4 text-gray-800">{{ object.monto }}</td>
+                        <td class="px-6 py-4 text-gray-800">{{ object.periodo }}</td>
+                        <td class="px-6 py-4 text-gray-800">{{ object.Interes }}</td>
+                        <td class="px-6 py-4 text-gray-800">{{ object.saldo_pendiente }}</td>
+                        <td class="flex justify-center items-center p-3 gap-2">
+                            <div class="flex space-x-2">
+                                <label for="modal-toggle{{ object.id }}"
+                                       class="text-green-900 hover:text-gray-900 cursor-pointer">
+                                    <i class="bi bi-eye-fill"></i>
+                                </label>
+                            </div>
+                            <input type="checkbox" id="modal-toggle{{ object.id }}" class="hidden peer">
+                            <div class="modal fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex item-center hidden peer-checked:block">
+                                <div class="modal-content relative bg-white rounded-lg max-w-3xl w-full mx-auto mt-16 p-6">
+                                    <!-- Botón de cierre del modal -->
+                                    <label for="modal-toggle{{ object.id }}"
+                                           class="absolute top-0 right-0 p-4 text-gray-600 cursor-pointer">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </label>
+
+                                    <!-- Detalle de las Alícuotas -->
+                                    <div class="section">
+                                        <div class="section-title text-xl font-semibold uppercase">Detalle de las
+                                            Alícuotas
+                                        </div>
+                                        <div class="table-container mt-4 overflow-x-auto">
+                                            <table class="min-w-full w-full table-auto border-collapse">
+                                                <thead>
+                                                <tr>
+                                                    <th class="border px-4 py-2">Secuencia</th>
+                                                    <th class="border px-4 py-2">Fecha</th>
+                                                    <th class="border px-4 py-2">Fecha Vencimiento</th>
+                                                    <th class="border px-4 py-2">Recargo</th>
+                                                    <th class="border px-4 py-2">Total</th>
+                                                    <th class="border px-4 py-2">Saldo a Pagar</th>
+                                                    <th class="border px-4 py-2">Estado</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Iterar sobre los detalles de pago -->
+                                                {% for detalle in detalles %}
+                                                    <!-- Mostrar cada detalle -->
+                                                    {% if detalle.cab_alicuota.id == object.id %}
+                                                        <tr>
+                                                            <td class="border px-4 py-2">{{ detalle.secuencia }}</td>
+                                                            <td class="border px-4 py-2">{{ detalle.fecha|date:"Y/m/d" }}</td>
+                                                            <td class="border px-4 py-2">
+                                                                {{ detalle.fecha_vencimiento|date:"Y/m/d" }}</td>
+                                                            <td class="border px-4 py-2">${{ detalle.recargo }}</td>
+                                                            <td class="border px-4 py-2">${{ detalle.total }}</td>
+                                                            <td class="border px-4 py-2">${{ detalle.saldo_pagar }}</td>
+                                                            <td class="border px-4 py-2">{{ detalle.estado }}</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </tbody>
+                                                <tfoot>
+                                                <tr class="table-total">
+                                                    <td colspan="4" class="border px-4 py-2 text-right">Total</td>
+                                                    <td class="border px-4 py-2">${{ object.saldo_financiar }}</td>
+                                                    <td class="border px-4 py-2">${{ object.saldo_pendiente }}</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="
+                                    {% if object.saldo_pendiente > 0 %}{% url 'pago_crear' object.id %}{% else %}#{% endif %}"
+                               class="bg-indigo-600 text-white px-4 w-28 py-2 rounded-md hover:bg-indigo-500">
+                                Crear Pago
+                            </a>
+                            <a href="{% url 'generar' object.id %}" target="_blank"
+                               class="px-4 py-2 bg-custom-red text-white rounded-md hover:bg-red-700 text-center">
+                                PDF
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'JS/vivienda_modal.js' %}"></script>
+{% endblock %}

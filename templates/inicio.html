@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="max-w-5xl mx-auto rounded-lg p-6 mt-4">
+        <div class="flex justify-between items-center pb-4">
+            <h1 class="text-left font-bold text-2xl uppercase">{{ titulo }}</h1>
+            <div class="flex items-center space-x-4">
+                <i class="bi bi-person-circle text-2xl"></i>
+                <span class="font-semibold uppercase">{{ user }}</span>
+                <div
+                        class="text-custom-green hover:text-green-600 cursor-pointer transition-transform duration-300 transform hover:rotate-180">
+                    <a href="{% url 'admin:index' %}">
+                        <i class="bi bi-gear-fill text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Tarjeta 1 -->
+            <div
+                    class="bg-gradient-to-br from-cyan-500 to-cyan-700 text-white p-6 rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-all duration-300 flex flex-col justify-between h-32 relative overflow-hidden">
+                <i
+                        class="bi bi-people-fill text-white opacity-20 text-[9rem] absolute right-2 bottom-0 transform translate-y-1/4 pointer-events-none"></i>
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-bold">{{ residentes }}</h2>
+                    <p class="text-sm font-medium">Residentes</p>
+                </div>
+                <div class="flex justify-between w-full mt-4 items-center relative z-10">
+                    <p class="text-sm font-semibold">Más información</p>
+                    <a href="{% url 'residente_lista' %}" class="text-lg">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2 -->
+            <div
+                    class="bg-gradient-to-br from-blue-500 to-blue-700  text-white p-6 rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-all duration-300 flex flex-col items-start justify-between h-32 relative overflow-hidden">
+                <i
+                        class="bi bi-house text-white opacity-20 text-[9rem] absolute right-2 bottom-0 transform translate-y-1/4 pointer-events-none"></i>
+                <div>
+                    <h2 class="text-3xl font-bold">{{ viviendas }}</h2>
+                    <p class="text-sm font-medium">Viviendas</p>
+                </div>
+                <div class="flex justify-between w-full mt-4 items-center">
+                    <p class="text-sm font-semibold">Más información</p>
+                    <a href="{% url 'vivienda_lista' %}" class="text-lg">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3 -->
+            <div
+                    class="bg-gradient-to-br from-green-500 to-green-700 text-white p-6 rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-all duration-300 flex flex-col items-start justify-between h-32 relative overflow-hidden">
+                <i
+                        class="bi bi-cash-coin text-white opacity-20 text-[9rem] absolute right-2 bottom-0 transform translate-y-1/4 pointer-events-none"></i>
+                <div>
+                    <h2 class="text-3xl font-bold">${{ finanzas }}</h2>
+                    <p class="text-sm font-medium">Monto Recaudado</p>
+                </div>
+                <div class="flex justify-between w-full mt-4 items-center">
+                    <p class="text-sm font-semibold">Más información</p>
+                    <a href="" class="text-lg">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <form method="get" id="dateRangeFilterForm" class="mt-8 max-w-md mx-auto">
+            <div class="flex flex-col sm:flex-row sm:space-x-4">
+                <div class="w-full sm:w-1/2">
+                    <label for="startDate" class="text-gray-700 block mb-1">Fecha Inicio:</label>
+                    <input type="date" id="startDate" name="start_date" value="{{ fecha_inicio|default:'' }}"
+                           class="w-full border border-gray-300 rounded-md px-3 py-2">
+                </div>
+                <div class="w-full sm:w-1/2 mt-4 sm:mt-0">
+                    <label for="endDate" class="text-gray-700 block mb-1">Fecha Fin:</label>
+                    <input type="date" id="endDate" name="end_date" value="{{ fecha_fin|default:'' }}"
+                           class="w-full border border-gray-300 rounded-md px-3 py-2">
+                </div>
+                <div class="w-full sm:w-auto flex items-center mt-7 sm:mt-7">
+                    <button type="submit"
+                            class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md">
+                        Filtrar
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!-- Gráficos estadísticos -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Monto por Mes</h2>
+                <!-- Contenedor con scroll horizontal -->
+                <div class="overflow-x-auto">
+                    <!-- El canvas tiene width: 400px, pero hay muchos más meses que lo harán más grande -->
+                    <canvas id="paymentChart" class="mx-auto" width="400" height="200"></canvas>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Tendencia por Mes</h2>
+                <!-- Contenedor con scroll horizontal -->
+                <div class="overflow-x-auto">
+                    <!-- El canvas tiene width: 400px, pero hay muchos más meses que lo harán más grande -->
+                    <canvas id="lineChart" class="mx-auto" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // Función para crear o actualizar los gráficos
+        const obtenerDatosGrafico = (año) => {
+            // Obtén los datos de los gráficos desde el contexto de Django
+            const meses = {{ grafico_meses | safe }};
+            const pagos = {{ grafico_totales | safe }};
+
+            // Gráfico de barras
+            const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+            const paymentChart = new Chart(paymentCtx, {
+                type: 'bar',
+                data: {
+                    labels: meses, // Usar meses dinámicos
+                    datasets: [{
+                        label: 'Valores Pagados',
+                        data: pagos, // Usar totales dinámicos
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de líneas
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            const lineChart = new Chart(lineCtx, {
+                type: 'line',  // Gráfico de líneas
+                data: {
+                    labels: meses,  // Meses
+                    datasets: [{
+                        label: 'Pagos Realizados',
+                        data: pagos,  // Pagos totales por mes
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Mes/Año'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Monto Total Pagado'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        };
+
+        // Inicializar los gráficos con los datos actuales
+        obtenerDatosGrafico("{{ año_seleccionado }}");
+    </script>
+{% endblock %}

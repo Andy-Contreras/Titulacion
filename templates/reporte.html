@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6 h-full flex flex-col">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">{{ titulo }}</h2>
+        <form action="#" method="get" class="space-y-4">
+            <!-- Fila de Fechas -->
+            <div class="flex flex-col sm:flex-row sm:space-x-4">
+                <div class="w-full sm:w-1/2">
+                    <label for="fecha_inicio" class="text-gray-700 block mb-1">Fecha Inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}"
+                           class="w-full border border-gray-300 rounded-md px-3 py-2">
+                </div>
+                <div class="w-full sm:w-1/2 mt-4 sm:mt-0">
+                    <label for="fecha_fin" class="text-gray-700 block mb-1">Fecha Fin:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin }}"
+                           class="w-full border border-gray-300 rounded-md px-3 py-2">
+                </div>
+            </div>
+            <!-- Fila de Botones -->
+            <div class="flex justify-center space-x-4">
+                <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-md">Filtrar</button>
+                <button type="submit" name="descargar_excel" value="1"
+                        class="bg-green-500 text-white px-6 py-2 rounded-md">
+                    Excel
+                </button>
+                <a href="{% url 'reportepago' %}" class="text-green-900 hover:text-gray-900 ">
+                    <i class="bi bi-arrow-counterclockwise text-3xl mb-1 "></i>
+                </a>
+            </div>
+        </form>
+        <div class="overflow-y-auto border border-gray-200 rounded-lg h-full mt-8">
+            <table class="min-w-full table-auto border-collaps">
+                <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-2 px-5 text-center align-middle text-gray-700">Fecha</th>
+                    <th class="py-2 px-5 text-center align-middle text-gray-700">Nombre</th>
+                    <th class="py-2 px-5 text-center align-middle text-gray-700">Valor Pagado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if facturas %}
+                    {% for factura in facturas %}
+                        <tr class="border-b">
+                            <td class="py-2 px-5 text-center align-middle text-gray-600">{{ factura.fecha_creacion }}</td>
+                            <td class="py-2 px-5 text-center align-middle text-gray-600">{{ factura.id_residentes.nombre }}</td>
+                            <td class="py-2 px-5 text-center align-middle text-gray-600">${{ factura.monto }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td class="py-2 px-4 text-center text-gray-600" colspan="3">No se encontraron pagos en este
+                            rango de fechas.
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+                <tfoot class="bg-gray-200">
+                <tr>
+                    <td class="py-2 px-5 text-right text-gray-700 font-semibold" colspan="2">Total:</td>
+                    <td class="py-2 px-5 text-center align-middle text-gray-600">${{ total }}</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block contenido %}
+    <div class="max-w-4xl mx-auto bg-white p-8 shadow-md rounded-lg">
+        <h2 class="text-2xl font-bold mb-6 text-center">Registro de Vivienda</h2>
+        <form method="POST" enctype="multipart/form-data" action="{{ action_save }}">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Tipo de Vivienda -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Tipo de Vivienda</label>
+                    {{ form.tipovivienda }}
+                </div>
+                <!-- Residente -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Residente</label>
+                    {{ form.residente }}
+                </div>
+                <!-- Villa -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Villa</label>
+                    {{ form.villa }}
+                    {% if form.villa.errors %}
+                        <div class="mt-2">
+                            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-2 text-sm rounded-md">
+                                <strong class="block font-semibold">Errores:</strong>
+                                <ul class="list-disc pl-5">
+                                    {% for error in form.villa.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Descripción -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Descripción</label>
+                    {{ form.descripcion }}
+                </div>
+                <!-- Habitaciones -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Habitaciones</label>
+                    {{ form.habitaciones }}
+                </div>
+                <!-- Baños -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Baños</label>
+                    {{ form.banos }}
+                </div>
+                <!-- Valor -->
+                <div>
+                    <label class="block text-left font-medium mb-1">Valor</label>
+                    {{ form.valor }}
+                </div>
+                <!-- Metros Cuadrados y Estado en la misma fila -->
+                <div class="col-span-1 md:col-span-2 flex items-center space-x-4">
+                    <div class="w-1/2">
+                        <label class="block text-left font-medium mb-1">Metros Cuadrados</label>
+                        {{ form.metros_cuadrados }}
+                    </div>
+                </div>
+                <div class="w-1/2 flex items-center">
+                    <span class="ml-md-4 text-gray-700 font-medium ">Estado</span>
+                    {{ form.estado }}
+                </div>
+                <!-- Imagen centrada y responsive -->
+                <div class="col-span-1 md:col-span-3 flex flex-col items-center">
+                    <label class="block text-left font-medium mb-1">Imagen</label>
+                    <input type="file" name="imagen" accept="image/*" onchange="previewImage(event)" class="mb-2">
+                    <div class="w-full max-w-sm h-32 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center overflow-hidden">
+                        <img id="preview" class="hidden w-full h-full object-cover" alt="Vista previa">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2 mt-6">
+                <a href="{{ cancel_url }}"
+                   class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center">
+                    Cancelar
+                </a>
+                <button type="submit"
+                        class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 text-center">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden'); // Muestra la imagen
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add('hidden'); // Oculta la imagen si no hay archivo
+            }
+        }
+    </script>
+{% endblock %}
