@@ -21,13 +21,12 @@ from datetime import datetime
 class ResidenteListView(LoginRequiredMixin, ListView):
     template_name = 'Residente/lista_residente.html'
     model = Residente
-    queryset = Residente.objects.filter(activo=True)
 
     def get_queryset(self):
         query = self.request.GET.get("query")
         if query:
             return self.model.objects.filter(
-                (Q(nombre__icontains=query) | Q(cedula__icontains=query)) & Q(activo=True)
+                (Q(nombre__icontains=query) | Q(cedula__icontains=query))
             )
         return super().get_queryset()
 

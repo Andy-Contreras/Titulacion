@@ -214,8 +214,6 @@ class TasaEntrada(models.Model):
 
     def __str__(self):
         return f"{self.porcentaje}%"
-
-
 # Modelo Vivienda
 class Vivienda(models.Model):
     tipovivienda = models.ForeignKey(TipoVivienda, on_delete=models.CASCADE, blank=False, null=False)
@@ -283,7 +281,6 @@ class CabAlicuota(models.Model):
     def __str__(self):
         return f"{self.nombre} ({self.monto})({self.tasa_interez})({self.periodo})"
 
-
 # Detalle alicuota
 class DetAlicuota(models.Model):
     cab_alicuota = models.ForeignKey(CabAlicuota, on_delete=models.CASCADE)
@@ -294,8 +291,6 @@ class DetAlicuota(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     saldo_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.CharField(max_length=10)
-
-
 
 # Pago
 class CabFactura(models.Model):

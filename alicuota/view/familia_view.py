@@ -40,7 +40,7 @@ class FamiliaCreateView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = 'Crear Familia'
-        context['residentes'] = Residente.objects.all()
+        context['residentes'] = Residente.objects.filter(status=True)
         context['action_save'] = '/familia_crear/'
         context['cancel_url'] = reverse_lazy('familia_lista')
         context['guarda_url'] = reverse_lazy('familia_lista')

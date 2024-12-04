@@ -170,9 +170,9 @@ function AgregarCliente() {
         return;
     }
     if (!correoCliente.trim()) {
-        mostrarAlerta('alerta_correo',"El campo email no puede estar vacío.");
+        mostrarAlerta('alerta_correo', "El campo email no puede estar vacío.");
         return; // Detenemos la ejecución si el campo está vacío
-    }else if (!correoCliente.trim()) {
+    } else if (!correoCliente.trim()) {
         mostrarAlerta('alerta_correo', "El campo email no puede estar vacío.");
         return; // Detenemos la ejecución si el campo está vacío
     } else if (existeEmail.length > 0) {
@@ -284,6 +284,7 @@ function MostrarDetalle(monto) {
     if (isNaN(monto) || monto <= 0) {
         const tablaPagos = document.getElementById('tablaPagos');
         tablaPagos.innerHTML = '';
+        mostrarAlerta('alerta_monto', `El valor ingresado no es válido. Por favor, ingresa un monto válido.`);
         return; // Si el monto no es válido, salimos de la función
     }
 

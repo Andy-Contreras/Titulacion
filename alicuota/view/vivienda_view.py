@@ -36,6 +36,7 @@ class ViviendaListView(LoginRequiredMixin, ListView):
         context['btn_actualizar'] = '/vivienda_actualizar'
         return context
 
+
 class ViviendaCreateView(LoginRequiredMixin, CreateView):
     template_name = 'Vivienda/crear_vivienda.html'
     model = Vivienda
@@ -49,13 +50,26 @@ class ViviendaCreateView(LoginRequiredMixin, CreateView):
         context['listar_url'] = '/vivienda_lista/'
         context['cancel_url'] = reverse_lazy('vivienda_lista')
         return context
+
     def form_valid(self, form):
+        vivienda = form.save(commit=False)
+
+        # Verificamos si hay un residente asignado
+        if vivienda.residente:
+            vivienda.estado = True  # Si tiene residente, la vivienda está ocupada
+        else:
+            vivienda.estado = False  # Si no tiene residente, la vivienda está disponible
+
+        # Guardamos la vivienda con el estado correcto
         response = super().form_valid(form)
-        patient = self.object
-        save_audit(self.request, patient, action='A')
-        messages.success(self.request, f"Éxito al Crear la Vivienda {patient.villa}.")
-        print("mande mensaje")
+
+        # Audit logging (asumido que tienes la función save_audit)
+        save_audit(self.request, vivienda, action='A')
+
+        # Mensaje de éxito
+        messages.success(self.request, f"Éxito al Crear la Vivienda {vivienda.villa}.")
         return response
+
 
 class ViviendaUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'Vivienda/crear_vivienda.html'
@@ -69,12 +83,24 @@ class ViviendaUpdateView(LoginRequiredMixin, UpdateView):
         context['action_save'] = self.request.path
         context['cancel_url'] = reverse_lazy('vivienda_lista')
         return context
+
     def form_valid(self, form):
+        vivienda = form.save(commit=False)
+
+        # Verificamos si el residente ha sido asignado o removido
+        if vivienda.residente:
+            vivienda.estado = True  # Si tiene residente, la vivienda está ocupada
+        else:
+            vivienda.estado = False  # Si no tiene residente, la vivienda está disponible
+
+        # Guardamos los cambios con el estado correcto
         response = super().form_valid(form)
-        patient = self.object
-        save_audit(self.request, patient, action='M')
-        messages.success(self.request, f"Éxito al Modificar el Residente {patient.villa}.")
-        print("mande mensaje")
+
+        # Audit logging (asumido que tienes la función save_audit)
+        save_audit(self.request, vivienda, action='M')
+
+        # Mensaje de éxito
+        messages.success(self.request, f"Éxito al Modificar la Vivienda {vivienda.villa}.")
         return response
 
 

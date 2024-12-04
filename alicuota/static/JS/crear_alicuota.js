@@ -193,7 +193,7 @@ function GenerarAlicuota() {
         console.log('Detalle');
         console.log(detalleAlicuota);
     } else {
-        alert("Falta información por ingresar.");
+        mostrarAlerta('alerta_ingresar',"Falta información por ingresar.");
     }
 }
 
@@ -210,7 +210,10 @@ function CrearAlicuota() {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Error en la red");
+                // Si la respuesta no es correcta, lanza un error con el mensaje de la respuesta
+                return response.json().then(data => {
+                    throw new Error(data.error || "Error desconocido");
+                });
             }
             return response.json();
         })
@@ -219,8 +222,11 @@ function CrearAlicuota() {
             console.log(data);
             window.location.href = '/alicuota_lista/'
         })
-        .catch(error => console.error("Error al crear el objeto:", error)
-        );
+        .catch(error => {
+            // Mostrar el mensaje de error que se obtiene del API
+            console.error("Error al crear el objeto:", error);
+            mostrarAlerta('errorAlerta', error.message); // Muestra el mensaje de error
+        });
 }
 
 function GenerarAlicuotaPDF(idAlicuota) {
@@ -233,7 +239,7 @@ function GenerarAlicuotaPDF(idAlicuota) {
         },
         body: JSON.stringify({
             email: datosCorroPDF,
-            subject: `Alicuota ${idAlicuota} - Pago de Alicuota`,
+            subject: `Alicuota ${idAlicuota} - Creación de Alícuota`,
             message: `Adjunto el PDF con los detalles de la Alicuota ${idAlicuota}.`,
         }),
     })

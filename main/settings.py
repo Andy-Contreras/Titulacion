@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-1vu$+-g+ji#6fm1whskw^x$=f9y^@*tb-)jl#=t$=^e+4!@x+(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 LOGIN_REDIRECT_URL = '/inicio/'
@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -78,6 +77,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+# Configuración de encabezados de seguridad
+X_FRAME_OPTIONS = 'DENY'
 
 ROOT_URLCONF = 'main.urls'
 
@@ -146,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -175,3 +176,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'acaa83406@gmail.com'
 EMAIL_HOST_PASSWORD = 'akqe lqcp vkts ehek'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+RECAPTCHA_SITE_KEY = '6Ldf7I4qAAAAAFr9MVW6YOyNpB2chQZVm8gIG3CE'
+RECAPTCHA_SECRET_KEY = '6Ldf7I4qAAAAAI9i77Di0K_73wZ1FW8bLUQ-fvyb'

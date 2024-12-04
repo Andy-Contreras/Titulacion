@@ -1,4 +1,5 @@
-from alicuota.models import Residente,FamiliaPropietario, MiembroFamilia, CabAlicuota, AuditUser, Residente, DetAlicuota
+from alicuota.models import Residente, FamiliaPropietario, MiembroFamilia, CabAlicuota, AuditUser, Residente, \
+    DetAlicuota, Vivienda
 from django.db import connection
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,7 +15,7 @@ class ValidacionesPersonaFamiliaView(APIView):
             persona = request.data.get('persona')
             cedula = persona['cedula']
             print(cedula)
-            cedula_residente= Residente.objects.filter(cedula=cedula).exists()
+            cedula_residente = Residente.objects.filter(cedula=cedula).exists()
             cedulaUnica = MiembroFamilia.objects.filter(cedula=cedula).exists()
             print(cedulaUnica)
             if not cedulaUnica and not cedula_residente:
@@ -269,7 +270,14 @@ class GuardarAlicuotaView(APIView):
             # Obtener la información desde el front
             cabecera = request.data.get('cabecera')
             pagos = request.data.get('pagos')
+            # Obtener la vivienda para verificar si tiene residente
+            vivienda_id = cabecera[0]['vivienda_id']
+            vivienda = Vivienda.objects.get(id=vivienda_id)
 
+            # Verificar si la vivienda tiene un residente asignado
+            if not vivienda.residente:
+                return Response({'error': 'La vivienda no tiene residente asignado.'},
+                                status=status.HTTP_400_BAD_REQUEST)
             # Insertar cabecera
             query = """insert into alicuota_cabalicuota
                         (pago_inicial, saldo_pagar, fecha_creacion, fecha_pago, periodo, monto, saldo_financiar, saldo_pendiente, Interes_id, entrada_tasa_id, vivienda_id, interestotal) 

@@ -84,6 +84,7 @@ solo_numeros_validator = RegexValidator(
 )
 
 
+
 # Validaciones para las apis
 def validar_cedula_ecuatoriana_api(cedula):
     try:
@@ -120,3 +121,4 @@ def validar_cedula_ecuatoriana_api(cedula):
     except (ValueError, IndexError):
         print('Captura errores de conversión y de acceso a índices.')
         return False  # Captura errores de conversión y de acceso a índices.
+
